@@ -1,0 +1,24 @@
+{
+    "accountHolderCode": "youseum_nl",
+    "accountHolderDetails": {
+        "storeDetails": [
+            {
+                "merchantAccount": "Convious_EU_POS",
+                "merchantCategoryCode": "7996",
+                "fullPhoneNumber": "+460703390519",
+                "virtualAccount": "190059679",
+                "splitConfigurationUUID": "8e7d4a98-1d87-4540-9de4-38738e068be6",
+                "storeName": "Youseum",
+                "storeReference": "youseum_nl",
+                "address": {
+                    "city": "Solna",
+                    "postalCode": "169 79",
+                    "country": "SE",
+                    "street": "Råsta Strandväg",
+                    "houseNumberOrName": "13c"
+                }
+            }
+        ]
+    }
+}
+

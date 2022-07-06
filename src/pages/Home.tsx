@@ -8,17 +8,17 @@ function Home() {
         <h3>Follow the steps in order</h3>
         <ol>
           <li>
-            Create a new merchant account{" "}
-            <Link to={"/new_merchant"}>{">"}</Link>
+            Create a new account holder{" "}
+            <Link to={"/new_account_holder"}>{">"}</Link>
           </li>
           <li>
             Create a new store
             <Link to={"/new_store"}>{">"}</Link>
           </li>
-          <li>
+          {/* <li>
             Assign the store to the merchant
             <Link to={"/assign_store"}>{">"}</Link>
-          </li>
+          </li> */}
         </ol>
       </main>
     </>
