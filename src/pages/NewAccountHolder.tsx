@@ -1,5 +1,9 @@
 import { useState } from "react";
 import JSONPretty from "react-json-pretty";
+// import * as dotenv from "dotenv";
+
+// const env = dotenv.config({ path: "../.env" });
+// const apiKey = env.parsed?.API_KEY as string;
 
 const NewAccountHolder = () => {
   const [accountHolderCode, setAccountHolderCode] = useState("");
@@ -62,14 +66,19 @@ const NewAccountHolder = () => {
   }
 
   function handleSendRequest() {
-    fetch("https://api.sampleapis.com/wines/reds", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: jsonData,
-    }).then((res) => {
+    fetch(
+      "http://www.whateverorigin.org/get?url=https://cal-test.adyen.com/cal/services/Account/v6/createAccountHolder",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "x-API-Key":
+            "AQEuhmfxL4/MbxdHw0exgG89s9SXSYhIQ7BFVnNfyW24+/F+wIOIQ7gnf8VWD1vJWhDBXVsNvuR83LVYjEgiTGAH-2AdH4tSncBxsC783RTZmdPffgDzWF1zEY1gIeq2OPt8=-u#,?AxwaWJJC&Dw7",
+          "Content-Type": "application/json",
+        },
+        body: jsonData,
+      }
+    ).then((res) => {
       handleResponseDisplay(res);
     });
   }
