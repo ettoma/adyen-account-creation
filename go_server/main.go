@@ -24,7 +24,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	r.Header.Add("Content-Type", "application/json")
 	r.Header.Add("Access-Control-Allow-Origin", "*")
-	r.Header.Add("x-API-Key", "AQEuhmfxL4/MbxdHw0exgG89s9SXSYhIQ7BFVnNfyW24+/F+wIOIQ7gnf8VWD1vJWhDBXVsNvuR83LVYjEgiTGAH-2AdH4tSncBxsC783RTZmdPffgDzWF1zEY1gIeq2OPt8=-u#,?AxwaWJJC&Dw7")
+	r.Header.Add("x-API-Key", "")
 
 	resp, _ := http.DefaultClient.Do(r)
 
