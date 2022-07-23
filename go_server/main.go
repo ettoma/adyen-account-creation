@@ -3,79 +3,93 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
-	"net/url"
 	"strings"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Adyen FE"))
 
-	data := url.Values{}
-	data.Set("merchantAccount", "")
+	// url := "https://cal-test.adyen.com/cal/services/Account/v6/createAccountHolder"
+	url := "https://httpbin.org/post"
+	method := "POST"
 
-	data1 := map[string]any{
-		"accountHolderCode": "convious_demo",
+	account_holder_code := "convious_demo"
+	country := "GB"
+	doing_business_as := "Convious"
+	legal_business_name := "Convious BV"
+	registration_number := "123415"
+	shareholder_type := "Controller"
+	job_title := "COO"
+	first_name := "John"
+	gender := "MALE"
+	last_name := "Kohn"
+	shareholder_email := "testshareholder@convious.com"
+	email := "test@convious.com"
+	address_country := "NL"
+	web_address := "https://www.convious.com"
+
+	formatted_json := map[string]any{
+		// "legalEntity":       "Business",
+
+		"accountHolderCode": account_holder_code,
 		"accountHolderDetails": map[string]any{
-			"address": map[string]any{
-				"country": "asdhsdas", //! <-- invalid country
+			"address": map[string]string{
+				"country": country,
 			},
 			"businessDetails": map[string]any{
-				"doingBusinessAs":    "Convious",
-				"legalBusinessName":  "Convious BV",
-				"registrationNumber": "123456789",
-				"shareholders": []map[string]any{
-					{
-						"shareholderType": "business",
-						"jobTitle":        "COO",
-						"name": map[string]any{
-							"firstName": "John",
-							"gender":    "MALE",
-							"lastName":  "Kohn",
-						},
-						"address": map[string]any{
-							"country": "NL",
-						},
-						"email": "support@convious.com",
-					},
-				},
-				"email":      "support@convious.com",
-				"webAddress": "www.convious.com",
+				"doingBusinessAs":    doing_business_as,
+				"legalBusinessName":  legal_business_name,
+				"registrationNumber": registration_number,
 			},
-			"legalEntity":    "Business",
-			"processingTier": 1,
-		},
-	}
+			"shareholders": []map[string]any{
+				{
+					"shareholderType": shareholder_type,
+					"jobTitle":        job_title,
+					"name": map[string]any{
+						"firstName": first_name,
+						"gender":    gender,
+						"lastName":  last_name,
+					},
+					"address": map[string]any{
+						"country": address_country,
+					},
+					"email": shareholder_email,
+				}},
+			"webAddress": web_address,
+			"email":      email},
+		"processingTier": 1,
+		"legalEntity":    "Business"}
 
-	// convert data1 into url.Values{}
-	data2, _ := json.Marshal(data1)
-	data3 := strings.NewReader(string(data2))
+	json_data, _ := json.Marshal(formatted_json)
+	json_data_string := strings.NewReader(string(json_data))
 
 	client := &http.Client{}
-
-	r, err := http.NewRequest(http.MethodPost, "https://cal-test.adyen.com/cal/services/Account/v6/createAccountHolder", data3)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// r.Header.Add("Content-Type", "application/json")
-	// r.Header.Add("Access-Control-Allow-Origin", "*")
-	r.Header.Add("x-API-Key", "")
-
-	resp, err := client.Do(r)
+	req, err := http.NewRequest(method, url, json_data_string)
 
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		return
 	}
+	req.Header.Add("x-API-key", "")
+	req.Header.Add("Content-Type", "application/json")
 
-	body, _ := io.ReadAll(resp.Body)
+	res, err := client.Do(req)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer res.Body.Close()
 
-	fmt.Println(resp.Status)
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	fmt.Println(string(body))
-
+	fmt.Println(res.StatusCode)
 }
 
 func main() {

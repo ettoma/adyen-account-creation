@@ -1,0 +1,32 @@
+{
+    "accountHolderCode": "convious_demo",
+    "accountHolderDetails": {
+        "address": {
+            "country": "GB"
+        },
+        "businessDetails": {
+            "doingBusinessAs": "Convious",
+            "email": "support@convious.com",
+            "legalBusinessName": "Convious BV",
+            "registrationNumber": "",
+            "shareholders": [
+                {
+                    "address": {
+                        "country": "NL"
+                    },
+                    "email": "shareholder@convious.com",
+                    "jobTitle": "COO",
+                    "name": {
+                        "firstName": "John",
+                        "gender": "MALE",
+                        "lastName": "Kohn"
+                    },
+                    "shareholderType": "business"
+                }
+            ],
+            "webAddress": "https://www.convious.com"
+        },
+        "legalEntity": "Business",
+        "processingTier": 1
+    }
+}
