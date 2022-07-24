@@ -19,8 +19,9 @@ const NewAccountHolder = () => {
   const [lastName, setLastName] = useState("");
   const [gender, setGender] = useState("Male");
   const [addressCountry, setAddressCountry] = useState("");
+  const [shareholderEmail, setShareholderEmail] = useState("");
   const [email, setEmail] = useState("");
-  const [webaddress, setWebAddress] = useState("");
+  const [webAddress, setWebAddress] = useState("");
 
   const [jsonData, setJsonData] = useState("");
   const [isHidden, setIsHidden] = useState(true);
@@ -30,33 +31,19 @@ const NewAccountHolder = () => {
 
     const data = {
       accountHolderCode: accountHolderCode,
-      accountHolderDetails: {
-        address: {
-          country: country,
-        },
-        businessDetails: {
-          doingBusinessAs: doingBusinessAs,
-          legalBusinessName: legalBusinessName,
-          registrationNumber: registrationNumber,
-          shareholders: [
-            {
-              shareholderType: shareholderType,
-              jobTitle: jobTitle,
-              name: {
-                firstName: firstName,
-                gender: gender,
-                lastName: lastName,
-              },
-              address: {
-                country: addressCountry,
-              },
-              email: email,
-            },
-          ],
-        },
-        email: email,
-        webAddress: webaddress,
-      },
+      countryAccount: country,
+      doingBusinessAs: doingBusinessAs,
+      legalBusinessName: legalBusinessName,
+      registrationNumber: registrationNumber,
+      shareholderType: shareholderType,
+      jobTitle: jobTitle,
+      firstName: firstName,
+      gender: gender,
+      lastName: lastName,
+      addressCountry: addressCountry,
+      shareholderEmail: shareholderEmail,
+      email: email,
+      webAddress: webAddress,
       legalEntity: "Business",
       processingTier: 1,
     };
@@ -68,18 +55,14 @@ const NewAccountHolder = () => {
   }
 
   function handleSendRequest() {
-    fetch(
-      "https://cal-test.adyen.com/cal/services/Account/v6/createAccountHolder",
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          // "x-API-Key": ""
-          "Content-Type": "application/json",
-        },
-        body: jsonData,
-      }
-    ).then((res) => {
+    fetch("http://localhost:8080/createAccountHolder", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: jsonData,
+    }).then((res) => {
       handleResponseDisplay(res);
     });
   }
@@ -163,6 +146,13 @@ const NewAccountHolder = () => {
           <option value="Male">Male</option>
           <option value="Female">Female</option>
         </select>
+        <label>Shareholder email address</label>
+        <input
+          type="text"
+          value={shareholderEmail}
+          onChange={(e) => setShareholderEmail(e.target.value)}
+        />
+
         <label>Shareholder address country</label>
         <input
           type="text"
@@ -176,12 +166,12 @@ const NewAccountHolder = () => {
           type="text"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Account holder email address"
+          placeholder="Customer service email address"
         />
         <label>Web address</label>
         <input
           type="text"
-          value={webaddress}
+          value={webAddress}
           onChange={(e) => setWebAddress(e.target.value)}
           placeholder="Partner's website"
         />
