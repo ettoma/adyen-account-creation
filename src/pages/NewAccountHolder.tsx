@@ -1,11 +1,5 @@
 import { useState } from "react";
 import JSONPretty from "react-json-pretty";
-// import * as dotenv from "dotenv";
-
-// const env =
-//   dotenv.config({
-//     path: "/Users/jinsettore/Desktop/Python course/React Jest/code/adyen_fe/src/pages/.env",
-//   }).parsed?.API_KEY || "";
 
 const NewAccountHolder = () => {
   const [accountHolderCode, setAccountHolderCode] = useState("");
