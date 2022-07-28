@@ -20,27 +20,27 @@ const NewAccountHolder = () => {
   const [jsonData, setJsonData] = useState("");
   const [isHidden, setIsHidden] = useState(true);
 
+  const data = {
+    accountHolderCode: accountHolderCode,
+    countryAccount: country,
+    doingBusinessAs: doingBusinessAs,
+    legalBusinessName: legalBusinessName,
+    registrationNumber: registrationNumber,
+    shareholderType: shareholderType,
+    jobTitle: jobTitle,
+    firstName: firstName,
+    gender: gender,
+    lastName: lastName,
+    addressCountry: addressCountry,
+    shareholderEmail: shareholderEmail,
+    email: email,
+    webAddress: webAddress,
+    legalEntity: "Business",
+    processingTier: 1,
+  };
+
   function handlePreview(e: any) {
     e.preventDefault();
-
-    const data = {
-      accountHolderCode: accountHolderCode,
-      countryAccount: country,
-      doingBusinessAs: doingBusinessAs,
-      legalBusinessName: legalBusinessName,
-      registrationNumber: registrationNumber,
-      shareholderType: shareholderType,
-      jobTitle: jobTitle,
-      firstName: firstName,
-      gender: gender,
-      lastName: lastName,
-      addressCountry: addressCountry,
-      shareholderEmail: shareholderEmail,
-      email: email,
-      webAddress: webAddress,
-      legalEntity: "Business",
-      processingTier: 1,
-    };
 
     const jsonData = JSON.stringify(data);
 
@@ -52,7 +52,6 @@ const NewAccountHolder = () => {
     fetch("http://localhost:8080/createAccountHolder", {
       method: "POST",
       headers: {
-        Accept: "application/json",
         "Content-Type": "application/json",
       },
       body: jsonData,
@@ -62,7 +61,11 @@ const NewAccountHolder = () => {
   }
 
   function handleResponseDisplay(response: Response) {
-    console.log(response);
+    if (response.ok) {
+      console.log("Request successful with status: " + response.status);
+    } else {
+      console.log("Request failed with error: " + response.statusText);
+    }
   }
 
   return (

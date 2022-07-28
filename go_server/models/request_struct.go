@@ -17,6 +17,10 @@ type Create_account_holder_request struct {
 	Web_address         string `json:"webAddress"`
 }
 
+type Adyen_account_holder_response struct {
+	Invalid_fields []string `json:"invalidFields"`
+}
+
 type Create_store_request struct {
 	Store_code string `json:"storeCode"`
 }

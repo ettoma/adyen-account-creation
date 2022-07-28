@@ -119,5 +119,13 @@ func Create_account_holder(w http.ResponseWriter, r *http.Request) {
 	log.Println(string(body))
 	log.Println(res.StatusCode)
 
-	w.Write(([]byte("Successfully created account holder")))
+	//TODO - return response to client (JSON)
+
+	var Adyen_response models.Adyen_account_holder_response
+	// write body as json in response
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.Unmarshal(body, &Adyen_response)
+
+	log.Print(Adyen_response)
 }
