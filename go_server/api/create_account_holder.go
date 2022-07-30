@@ -2,12 +2,14 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
 
 	"github.com/ettoma/adyen_fe/models"
+	"github.com/ettoma/adyen_fe/utils"
 )
 
 func Create_account_holder(w http.ResponseWriter, r *http.Request) {
@@ -40,8 +42,8 @@ func Create_account_holder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// url := "https://cal-test.adyen.com/cal/services/Account/v6/createAccountHolder"
-	url := "https://httpbin.org/post"
+	url := "https://cal-test.adyen.com/cal/services/Account/v6/createAccountHolder" //! Test environment
+	// url := "https://httpbin.org/post"
 	method := "POST"
 
 	account_holder_code := Create_account_holder_request.Account_holder_code
@@ -60,7 +62,6 @@ func Create_account_holder(w http.ResponseWriter, r *http.Request) {
 	web_address := Create_account_holder_request.Web_address
 
 	formatted_json := map[string]any{
-		// "legalEntity":       "Business",
 
 		"accountHolderCode": account_holder_code,
 		"accountHolderDetails": map[string]any{
@@ -91,7 +92,13 @@ func Create_account_holder(w http.ResponseWriter, r *http.Request) {
 		"processingTier": 1,
 		"legalEntity":    "Business"}
 
-	json_data, _ := json.Marshal(formatted_json)
+	json_data, err := json.Marshal(formatted_json)
+
+	if err != nil {
+		w.Write([]byte("Error marshalling request body"))
+		log.Println(err)
+		return
+	}
 	json_data_string := strings.NewReader(string(json_data))
 
 	client := &http.Client{}
@@ -101,7 +108,7 @@ func Create_account_holder(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-	req.Header.Add("x-API-key", "") //! Add your API key here
+	req.Header.Add("x-API-key", utils.Get_env("TEST_API_KEY")) //! Add your API key here
 	req.Header.Add("Content-Type", "application/json")
 
 	res, err := client.Do(req)
@@ -116,16 +123,48 @@ func Create_account_holder(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-	log.Println(string(body))
-	log.Println(res.StatusCode)
+	// log.Println(string(body))
+	// log.Println(res.StatusCode)
 
-	//TODO - return response to client (JSON)
-
-	var Adyen_response models.Adyen_account_holder_response
-	// write body as json in response
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.Unmarshal(body, &Adyen_response)
+	w.WriteHeader(res.StatusCode)
 
-	log.Print(Adyen_response)
+	// Invalid request
+	if res.Status != "OK" {
+		var Adyen_response models.Adyen_account_holder_response_invalid
+		err = json.Unmarshal(body, &Adyen_response)
+
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
+		var json_response []map[string]any
+
+		for _, field := range Adyen_response.Invalid_fields {
+			error_code := fmt.Sprintf("%d", field.Error_code)
+			error_message := field.Error_description
+			field_name := fmt.Sprintf("%v", field.FieldType.Field_name)
+
+			json_format := map[string]any{
+				"error_code":    error_code,
+				"error_message": error_message,
+				"field_name":    field_name,
+			}
+
+			json_response = append(json_response, json_format)
+		}
+		json_data, err := json.Marshal(json_response)
+
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		w.Write(json_data)
+
+	} else {
+		// Valid request
+		log.Printf("Request status: %v", res.Status)
+	}
+
 }

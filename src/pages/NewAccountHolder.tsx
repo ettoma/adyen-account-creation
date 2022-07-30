@@ -55,9 +55,14 @@ const NewAccountHolder = () => {
         "Content-Type": "application/json",
       },
       body: jsonData,
-    }).then((res) => {
-      handleResponseDisplay(res);
-    });
+    }).then((res) =>
+      res.body
+        ?.getReader()
+        .read()
+        .then((res) => {
+          console.log(res);
+        })
+    );
   }
 
   function handleResponseDisplay(response: Response) {
@@ -65,6 +70,10 @@ const NewAccountHolder = () => {
       console.log("Request successful with status: " + response.status);
     } else {
       console.log("Request failed with error: " + response.statusText);
+      // display response body in alert
+      response.json().then((data) => {
+        alert(data.body);
+      });
     }
   }
 

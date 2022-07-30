@@ -17,8 +17,25 @@ type Create_account_holder_request struct {
 	Web_address         string `json:"webAddress"`
 }
 
-type Adyen_account_holder_response struct {
-	Invalid_fields []string `json:"invalidFields"`
+type Field_Type struct {
+	Field      string `json:"field"`
+	Field_name string `json:"fieldName"`
+}
+
+type InvalidFields struct {
+	Error_code        int        `json:"errorCode"`
+	Error_description string     `json:"errorDescription"`
+	FieldType         Field_Type `json:"fieldType"`
+}
+
+type Adyen_account_holder_response_invalid struct {
+	Invalid_fields []InvalidFields `json:"invalidFields"`
+	Psp_reference  string          `json:"pspReference"`
+}
+
+type Adyen_account_holder_response_valid struct {
+	Invalid_fields []map[string]interface{} `json:"invalidFields"`
+	Psp_reference  string                   `json:"pspReference"`
 }
 
 type Create_store_request struct {
