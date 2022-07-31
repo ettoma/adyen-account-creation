@@ -1,6 +1,19 @@
 import { useState } from "react";
 import JSONPretty from "react-json-pretty";
 
+import Button from "@mui/material/Button";
+import SendIcon from "@mui/icons-material/Send";
+
+import "./styles/NewAccountHolder.scss";
+import {
+  FormControl,
+  FormLabel,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
+
 const NewAccountHolder = () => {
   const [accountHolderCode, setAccountHolderCode] = useState("");
   const [country, setCountry] = useState("");
@@ -19,6 +32,8 @@ const NewAccountHolder = () => {
 
   const [jsonData, setJsonData] = useState("");
   const [isHidden, setIsHidden] = useState(true);
+
+  const [jsonResponse, setJsonResponse] = useState("");
 
   const data = {
     accountHolderCode: accountHolderCode,
@@ -55,137 +70,132 @@ const NewAccountHolder = () => {
         "Content-Type": "application/json",
       },
       body: jsonData,
-    }).then((res) =>
-      res.body
-        ?.getReader()
-        .read()
-        .then((res) => {
-          console.log(res);
-        })
-    );
+    }).then((res) => handleResponseDisplay(res));
   }
 
-  function handleResponseDisplay(response: Response) {
-    if (response.ok) {
-      console.log("Request successful with status: " + response.status);
-    } else {
-      console.log("Request failed with error: " + response.statusText);
-      // display response body in alert
-      response.json().then((data) => {
-        alert(data.body);
-      });
-    }
+  function handleResponseDisplay(res: Response) {
+    res.json().then((res) => {
+      setJsonResponse(res);
+    });
   }
 
   return (
-    <div>
-      <h3>New Account Holder</h3>
-      <form
-        onSubmit={(e) => handlePreview(e)}
-        style={{ display: "flex", flexDirection: "column", width: 240 }}
-      >
-        <label>Account holder code</label>
-        <input
-          type="text"
-          value={accountHolderCode}
-          onChange={(e) => setAccountHolderCode(e.target.value)}
-          placeholder="widget slug"
-        />
-        <label>Country</label>
-        <input
-          type="text"
-          placeholder="country as ISO code"
-          value={country}
-          onChange={(e) => setCountry(e.target.value)}
-          maxLength={2}
-        />
-        <label>Doing business as</label>
-        <input
-          type="text"
-          value={doingBusinessAs}
-          onChange={(e) => setDoingBusinessAs(e.target.value)}
-          placeholder="Normally the name of the company"
-        />
-        <label>Legal business name</label>
-        <input
-          type="text"
-          value={legalBusinessName}
-          onChange={(e) => setLegalBusinessName(e.target.value)}
-          placeholder="Legal name of the company"
-        />
-        <label>Registration number</label>
-        <input
-          type="text"
-          value={registrationNumber}
-          onChange={(e) => setRegistrationNumber(e.target.value)}
-          placeholder="Company registration number"
-        />
-        <label>Shareholder type</label>
-        <select
-          onChange={(e) => setShareholderType(e.target.value)}
-          value={shareholderType}
-        >
-          <option value="Controller">Controller</option>
-          <option value="Owner">Owner</option>
-        </select>
-        <label>Job title</label>
-        <input
-          type="text"
-          value={jobTitle}
-          onChange={(e) => setJobTitle(e.target.value)}
-          placeholder="COO or similar"
-        />
-        <label>First name</label>
-        <input
-          type="text"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-        />
-        <label>Last name</label>
-        <input
-          type="text"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-        />
-        <label>Gender</label>
-        <select onChange={(e) => setGender(e.target.value)} value={gender}>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-        </select>
-        <label>Shareholder email address</label>
-        <input
-          type="text"
-          value={shareholderEmail}
-          onChange={(e) => setShareholderEmail(e.target.value)}
-        />
+    <div className="main-container">
+      <div>
+        <h3>New Account Holder</h3>
+        <form onSubmit={(e) => handlePreview(e)}>
+          <FormControl fullWidth>
+            <FormLabel>Account holder code</FormLabel>
+            <TextField
+              label="Account holder code"
+              type="text"
+              value={accountHolderCode}
+              onChange={(e) => setAccountHolderCode(e.target.value)}
+              placeholder="widget slug"
+            />
+          </FormControl>
+          <InputLabel>Country</InputLabel>
+          <TextField
+            type="text"
+            placeholder="country as ISO code"
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            // maxLength={2}
+          />
+          <InputLabel>Doing business as</InputLabel>
+          <TextField
+            type="text"
+            value={doingBusinessAs}
+            onChange={(e) => setDoingBusinessAs(e.target.value)}
+            placeholder="Normally the name of the company"
+          />
+          <InputLabel>Legal business name</InputLabel>
+          <TextField
+            type="text"
+            value={legalBusinessName}
+            onChange={(e) => setLegalBusinessName(e.target.value)}
+            placeholder="Legal name of the company"
+          />
+          <InputLabel>Registration number</InputLabel>
+          <TextField
+            type="text"
+            value={registrationNumber}
+            onChange={(e) => setRegistrationNumber(e.target.value)}
+            placeholder="Company registration number"
+          />
+          <InputLabel>Shareholder type</InputLabel>
+          <Select
+            onChange={(e) => setShareholderType(e.target.value)}
+            value={shareholderType}
+          >
+            <MenuItem value="Controller">Controller</MenuItem>
+            <MenuItem value="Owner">Owner</MenuItem>
+          </Select>
+          <InputLabel>Job title</InputLabel>
+          <TextField
+            type="text"
+            value={jobTitle}
+            onChange={(e) => setJobTitle(e.target.value)}
+            placeholder="COO or similar"
+          />
+          <InputLabel>First name</InputLabel>
+          <TextField
+            type="text"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+          <InputLabel>Last name</InputLabel>
+          <input
+            type="text"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
+          <InputLabel>Gender</InputLabel>
+          <select onChange={(e) => setGender(e.target.value)} value={gender}>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+          <InputLabel>Shareholder email address</InputLabel>
+          <input
+            type="text"
+            value={shareholderEmail}
+            onChange={(e) => setShareholderEmail(e.target.value)}
+          />
 
-        <label>Shareholder address country</label>
-        <input
-          type="text"
-          value={addressCountry}
-          onChange={(e) => setAddressCountry(e.target.value)}
-          placeholder="country as ISO code"
-          maxLength={2}
-        />
-        <label>Email address</label>
-        <input
-          type="text"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Customer service email address"
-        />
-        <label>Web address</label>
-        <input
-          type="text"
-          value={webAddress}
-          onChange={(e) => setWebAddress(e.target.value)}
-          placeholder="Partner's website"
-        />
-        <button type="submit">Preview</button>
-      </form>
+          <InputLabel>Shareholder address country</InputLabel>
+          <input
+            type="text"
+            value={addressCountry}
+            onChange={(e) => setAddressCountry(e.target.value)}
+            placeholder="country as ISO code"
+            maxLength={2}
+          />
+          <InputLabel>Email address</InputLabel>
+          <input
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Customer service email address"
+          />
+          <InputLabel>Web address</InputLabel>
+          <input
+            type="text"
+            value={webAddress}
+            onChange={(e) => setWebAddress(e.target.value)}
+            placeholder="Partner's website"
+          />
+
+          <Button type="submit">Preview</Button>
+        </form>
+      </div>
       <div hidden={isHidden}>
         <JSONPretty data={jsonData}></JSONPretty>
-        <button onClick={() => handleSendRequest()}>Send</button>
+        <Button onClick={() => handleSendRequest()} endIcon={<SendIcon />}>
+          Send
+        </Button>
+      </div>
+      <div hidden={jsonResponse != "" ? false : true}>
+        <JSONPretty data={jsonResponse}></JSONPretty>
       </div>
     </div>
   );

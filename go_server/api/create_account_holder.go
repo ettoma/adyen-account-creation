@@ -147,9 +147,10 @@ func Create_account_holder(w http.ResponseWriter, r *http.Request) {
 			field_name := fmt.Sprintf("%v", field.FieldType.Field_name)
 
 			json_format := map[string]any{
-				"error_code":    error_code,
-				"error_message": error_message,
-				"field_name":    field_name,
+				"success":      false,
+				"errorCode":    error_code,
+				"errorMessage": error_message,
+				"fieldName":    field_name,
 			}
 
 			json_response = append(json_response, json_format)
