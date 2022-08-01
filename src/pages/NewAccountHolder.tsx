@@ -6,12 +6,15 @@ import SendIcon from "@mui/icons-material/Send";
 
 import "./styles/NewAccountHolder.scss";
 import {
+  Alert,
   FormControl,
   FormLabel,
   InputLabel,
   MenuItem,
   Select,
+  Snackbar,
   TextField,
+  Typography,
 } from "@mui/material";
 
 const NewAccountHolder = () => {
@@ -32,6 +35,7 @@ const NewAccountHolder = () => {
 
   const [jsonData, setJsonData] = useState("");
   const [isHidden, setIsHidden] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const [jsonResponse, setJsonResponse] = useState("");
 
@@ -76,13 +80,14 @@ const NewAccountHolder = () => {
   function handleResponseDisplay(res: Response) {
     res.json().then((res) => {
       setJsonResponse(res);
+      setIsOpen(true);
     });
   }
 
   return (
     <div className="main-container">
       <div>
-        <h3>New Account Holder</h3>
+        <Typography component="h1">Create Account Holder</Typography>
         <form onSubmit={(e) => handlePreview(e)}>
           <FormControl fullWidth>
             <FormLabel>Account holder code</FormLabel>
@@ -196,6 +201,13 @@ const NewAccountHolder = () => {
       </div>
       <div hidden={jsonResponse != "" ? false : true}>
         <JSONPretty data={jsonResponse}></JSONPretty>
+      </div>
+      <div>
+        <Snackbar open={isOpen} autoHideDuration={6000}>
+          <Alert severity="success" sx={{ width: "100%" }}>
+            This is a success message!
+          </Alert>
+        </Snackbar>
       </div>
     </div>
   );
