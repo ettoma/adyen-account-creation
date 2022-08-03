@@ -1,13 +1,18 @@
 .main-container {
-    display: flex;
     height: 100vh;
+    padding: 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
 }
 
 form {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 20px;
 }
 
-FormControl {
-    margin-bottom: 1rem;
-}
+// .dialog {
+//      color: aqua;
+// }
