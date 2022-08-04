@@ -1,0 +1,80 @@
+{
+    "invalidFields": [],
+    "pspReference": "8516596434403018",
+    "accountCode": "8516596434403026",
+    "accountHolderCode": "testasdasdasdas",
+    "accountHolderDetails": {
+        "address": {
+            "country": "US"
+        },
+        "bankAccountDetails": [],
+        "businessDetails": {
+            "doingBusinessAs": "Real Good Restaurant",
+            "legalBusinessName": "Real Good Restaurant Inc.",
+            "shareholders": [
+                {
+                    "address": {
+                        "country": "NL"
+                    },
+                    "email": "testshareholder@email.com",
+                    "name": {
+                        "firstName": "John",
+                        "gender": "MALE",
+                        "lastName": "Carpenter"
+                    },
+                    "shareholderCode": "946c1672-51fd-4e93-8162-2240e3809156"
+                }
+            ]
+        },
+        "email": "test@email.com",
+        "legalArrangements": [],
+        "merchantCategoryCode": "7999",
+        "payoutMethods": [],
+        "webAddress": null
+    },
+    "accountHolderStatus": {
+        "status": "Active",
+        "processingState": {
+            "disabled": false,
+            "processedFrom": {
+                "currency": "USD",
+                "value": 0
+            },
+            "processedTo": {
+                "currency": "USD",
+                "value": 0
+            },
+            "tierNumber": 0
+        },
+        "payoutState": {
+            "allowPayout": false,
+            "disabled": false
+        },
+        "events": []
+    },
+    "legalEntity": "Business",
+    "verification": {
+        "accountHolder": {
+            "checks": [
+                {
+                    "type": "COMPANY_VERIFICATION",
+                    "status": "DATA_PROVIDED"
+                }
+            ]
+        },
+        "shareholders": [
+            {
+                "checks": [
+                    {
+                        "type": "IDENTITY_VERIFICATION",
+                        "status": "AWAITING_DATA",
+                        "requiredFields": [
+                            "AccountHolderDetails.BusinessDetails.Shareholders.PersonalData.personalData"
+                        ]
+                    }
+                ],
+                "shareholderCode": "946c1672-51fd-4e93-8162-2240e3809156"
+            }
+        ]
+    }
+}

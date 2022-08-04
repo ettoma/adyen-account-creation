@@ -123,8 +123,6 @@ func Create_account_holder(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-	// log.Println(string(body))
-	// log.Println(res.StatusCode)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(res.StatusCode)
@@ -166,6 +164,16 @@ func Create_account_holder(w http.ResponseWriter, r *http.Request) {
 	} else {
 		// Valid request
 		log.Printf("Request status: %v", res.Status)
+		// var Adyen_response models.Adyen_account_holder_response_valid
+		// err = json.Unmarshal(body, &Adyen_response)
+
+		// if err != nil {
+		// 	log.Println(err)
+		// 	return
+		// }
+
+		// fmt.Println(Adyen_response)
+
 	}
 
 }
