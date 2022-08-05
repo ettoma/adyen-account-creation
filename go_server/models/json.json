@@ -1,0 +1,77 @@
+{
+    "invalidFields": [],
+    "pspReference": "8816596458918955",
+    "accountCode": "8816596458918963",
+    "accountHolderCode": "112113qqa2s11djcsadjsadasdas",
+    "accountHolderDetails": {
+        "address": {
+            "country": "NL"
+        },
+        "bankAccountDetails": [],
+        "businessDetails": {
+            "doingBusinessAs": "asdqewqew",
+            "legalBusinessName": "asdasdsa29",
+            "registrationNumber": "12810"
+        },
+        "email": "joker@main.com",
+        "legalArrangements": [],
+        "merchantCategoryCode": "7111",
+        "payoutMethods": [],
+        "webAddress": "https:\/\/www.convious.com"
+    },
+    "accountHolderStatus": {
+        "status": "Active",
+        "processingState": {
+            "disabled": false,
+            "processedFrom": {
+                "currency": "EUR",
+                "value": 1
+            },
+            "tierNumber": 1
+        },
+        "payoutState": {
+            "allowPayout": false,
+            "disabled": false
+        },
+        "events": [
+            {
+                "event": "InactivateAccount",
+                "executionDate": "2022-09-03T22:44:51+02:00",
+                "reason": "Processed more than EUR 0.01 or equivalent, deadline triggered"
+            }
+        ]
+    },
+    "legalEntity": "Business",
+    "verification": {
+        "accountHolder": {
+            "checks": [
+                {
+                    "type": "COMPANY_VERIFICATION",
+                    "status": "AWAITING_DATA",
+                    "requiredFields": [
+                        "AccountHolderDetails.Address.address"
+                    ]
+                },
+                {
+                    "type": "IDENTITY_VERIFICATION",
+                    "status": "AWAITING_DATA",
+                    "requiredFields": [
+                        "AccountHolderDetails.BusinessDetails.shareholder",
+                        "AccountHolderDetails.BusinessDetails.signatory"
+                    ]
+                },
+                {
+                    "type": "PAYOUT_METHOD_VERIFICATION",
+                    "status": "AWAITING_DATA",
+                    "requiredFields": [
+                        "AccountHolderDetails.BankAccountDetails.bankAccount"
+                    ]
+                },
+                {
+                    "type": "PCI_VERIFICATION",
+                    "status": "PENDING"
+                }
+            ]
+        }
+    }
+}
