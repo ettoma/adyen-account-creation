@@ -3,7 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"strings"
@@ -27,7 +27,7 @@ func Create_account_holder(w http.ResponseWriter, r *http.Request) {
 	}
 	r.Body = http.MaxBytesReader(w, r.Body, 1048576) // 1MB max, prevent malicious requests
 
-	req_body, err := ioutil.ReadAll(r.Body)
+	req_body, err := io.ReadAll(r.Body)
 	if err != nil {
 		w.Write([]byte("Error reading request body"))
 		log.Println(err)
@@ -43,7 +43,6 @@ func Create_account_holder(w http.ResponseWriter, r *http.Request) {
 	}
 
 	url := "https://cal-test.adyen.com/cal/services/Account/v6/createAccountHolder" //! Test environment
-	// url := "https://httpbin.org/post"
 	method := "POST"
 
 	account_holder_code := Create_account_holder_request.Account_holder_code
@@ -108,7 +107,7 @@ func Create_account_holder(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-	req.Header.Add("x-API-key", utils.Get_env("TEST_API_KEY")) //! Add your API key here
+	req.Header.Add("x-API-key", utils.Get_env("TEST_API_KEY")) //! API key from .env
 	req.Header.Add("Content-Type", "application/json")
 
 	res, err := client.Do(req)
@@ -118,7 +117,7 @@ func Create_account_holder(w http.ResponseWriter, r *http.Request) {
 	}
 	defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		log.Println(err)
 		return
@@ -139,10 +138,23 @@ func Create_account_holder(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		fmt.Println(Adyen_response)
+		json_response := map[string]any{
+			"success":              true,
+			"message":              "Account holder created",
+			"pspReference":         Adyen_response.Psp_reference,
+			"accountCode":          Adyen_response.Account_code,
+			"accountHolderCode":    Adyen_response.Account_holder_code,
+			"accountHolderDetails": Adyen_response.Account_holder_details,
+			"accountHolderStatus":  Adyen_response.Account_holder_status,
+		}
 
-		//TODO: Return response to client
-
+		json_data, err := json.Marshal(json_response)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		w.Write(json_data)
+		log.Printf("Response status: %v \nAccount Holder Created: %v", res.StatusCode, Adyen_response.Account_holder_code)
 	}
 	// Invalid request
 	if res.StatusCode != 200 {
@@ -177,6 +189,7 @@ func Create_account_holder(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		w.Write(json_data)
+		log.Printf("Request failed: %v \nReason: %v", res.StatusCode, Adyen_response.Invalid_fields[0].Error_description)
 
 	}
 

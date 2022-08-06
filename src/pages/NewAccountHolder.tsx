@@ -41,7 +41,7 @@ const NewAccountHolder = () => {
 
   const [isSuccess, setIsSuccess] = useState<Boolean>();
 
-  const [jsonResponse, setJsonResponse] = useState("");
+  const [jsonResponse, setJsonResponse] = useState();
 
   const data = {
     accountHolderCode: accountHolderCode,
@@ -95,7 +95,7 @@ const NewAccountHolder = () => {
 
   return (
     <div className="main-container">
-        <h2>Create Account Holder</h2>
+      <h2>Create Account Holder</h2>
       <div>
         <form onSubmit={(e) => handlePreview(e)}>
           <FormControl className="main-container__form-field" fullWidth>
@@ -105,7 +105,7 @@ const NewAccountHolder = () => {
               value={accountHolderCode}
               onChange={(e) => setAccountHolderCode(e.target.value)}
               helperText="The widget slug"
-              variant="outlined"  
+              variant="outlined"
             />
           </FormControl>
           <FormControl className="main-container__form-field" fullWidth>
@@ -119,140 +119,140 @@ const NewAccountHolder = () => {
             />
           </FormControl>
           <FormControl className="main-container__form-field" fullWidth>
-          <TextField
-            label="Doing business as"
-            type="text"
-            value={doingBusinessAs}
-            onChange={(e) => setDoingBusinessAs(e.target.value)}
-            placeholder="Normally the name of the company"
-          />
+            <TextField
+              label="Doing business as"
+              type="text"
+              value={doingBusinessAs}
+              onChange={(e) => setDoingBusinessAs(e.target.value)}
+              placeholder="Normally the name of the company"
+            />
           </FormControl>
           <FormControl className="main-container__form-field" fullWidth>
-          <TextField
-            label="Legal business name"
-            type="text"
-            value={legalBusinessName}
-            onChange={(e) => setLegalBusinessName(e.target.value)}
-            placeholder="Legal name of the company"
-          />
+            <TextField
+              label="Legal business name"
+              type="text"
+              value={legalBusinessName}
+              onChange={(e) => setLegalBusinessName(e.target.value)}
+              placeholder="Legal name of the company"
+            />
           </FormControl>
           <FormControl className="main-container__form-field" fullWidth>
-          <TextField
-            label="Registration number"
-            type="text"
-            value={registrationNumber}
-            onChange={(e) => setRegistrationNumber(e.target.value)}
-            placeholder="Company registration number"
-          />
+            <TextField
+              label="Registration number"
+              type="text"
+              value={registrationNumber}
+              onChange={(e) => setRegistrationNumber(e.target.value)}
+              placeholder="Company registration number"
+            />
           </FormControl>
           <FormControl className="main-container__form-field" fullWidth>
-            
-          <Select 
-            
-            label="Shareholder type"
-            onChange={(e) => setShareholderType(e.target.value)}
-            value={shareholderType}
-          >
-            <MenuItem value="Controller">Controller</MenuItem>
-            <MenuItem value="Owner">Owner</MenuItem>
-          </Select>
+            <Select
+              label="Shareholder type"
+              onChange={(e) => setShareholderType(e.target.value)}
+              value={shareholderType}
+            >
+              <MenuItem value="Controller">Controller</MenuItem>
+              <MenuItem value="Owner">Owner</MenuItem>
+            </Select>
           </FormControl>
           <FormControl className="main-container__form-field" fullWidth>
-          <TextField
-            label="Job title"
-            type="text"
-            value={jobTitle}
-            onChange={(e) => setJobTitle(e.target.value)}
-            placeholder="COO or similar"
-          />
+            <TextField
+              label="Job title"
+              type="text"
+              value={jobTitle}
+              onChange={(e) => setJobTitle(e.target.value)}
+              placeholder="COO or similar"
+            />
           </FormControl>
           <FormControl className="main-container__form-field" fullWidth>
-          <TextField
-            label="First name"
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
+            <TextField
+              label="First name"
+              type="text"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
           </FormControl>
           <FormControl className="main-container__form-field" fullWidth>
-          <TextField
-            label="Last name"
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
+            <TextField
+              label="Last name"
+              type="text"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
           </FormControl>
           <FormControl className="main-container__form-field" fullWidth>
-          <Select onChange={(e) => setGender(e.target.value)} value={gender}>
-            <MenuItem value="Male">Male</MenuItem>
-            <MenuItem value="Female">Female</MenuItem>
-          </Select>
+            <Select onChange={(e) => setGender(e.target.value)} value={gender}>
+              <MenuItem value="Male">Male</MenuItem>
+              <MenuItem value="Female">Female</MenuItem>
+            </Select>
           </FormControl>
           <FormControl className="main-container__form-field" fullWidth>
-          <TextField
-            label="Shareholder email"
-            type="text"
-            value={shareholderEmail}
-            onChange={(e) => setShareholderEmail(e.target.value)}
-          />
+            <TextField
+              label="Shareholder email"
+              type="text"
+              value={shareholderEmail}
+              onChange={(e) => setShareholderEmail(e.target.value)}
+            />
           </FormControl>
           <FormControl className="main-container__form-field" fullWidth>
-
-          <TextField
-            label="Account holder address country"
-            type="text"
-            value={addressCountry}
-            onChange={(e) => setAddressCountry(e.target.value)}
-            placeholder="country as ISO code"
-            // maxLength={2}
-          />
+            <TextField
+              label="Account holder address country"
+              type="text"
+              value={addressCountry}
+              onChange={(e) => setAddressCountry(e.target.value)}
+              placeholder="country as ISO code"
+              // maxLength={2}
+            />
           </FormControl>
           <FormControl className="main-container__form-field" fullWidth>
-          <TextField
-            label="General venue email address"
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Customer service email address"
-          />
+            <TextField
+              label="General venue email address"
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Customer service email address"
+            />
           </FormControl>
           <FormControl className="main-container__form-field" fullWidth>
-          <TextField
-            label="Web address"
-            type="text"
-            value={webAddress}
-            onChange={(e) => setWebAddress(e.target.value)}
-            placeholder="Partner's website"
-          />
+            <TextField
+              label="Web address"
+              type="text"
+              value={webAddress}
+              onChange={(e) => setWebAddress(e.target.value)}
+              placeholder="Partner's website"
+            />
           </FormControl>
           <Button type="submit">Preview</Button>
         </form>
+        {jsonResponse ? <div>{jsonResponse["pspReference"]}</div> : null}
       </div>
-      <Dialog open={!isHidden} className="dialog" >
-        <DialogTitle>The data you are going to send</DialogTitle>
+      <Dialog open={!isHidden} className="dialog">
+        <DialogTitle>{jsonResponse ? "Result" : "To be sent"}</DialogTitle>
         <DialogContent>
-        <JSONPretty data={jsonResponse ? jsonResponse : jsonData}></JSONPretty>
+          <JSONPretty
+            data={jsonResponse ? jsonResponse : jsonData}
+          ></JSONPretty>
         </DialogContent>
         <DialogActions>
-
-        <Button onClick={()=>{
-          setIsHidden(true)}} endIcon={<Delete />}>
-          Cancel
-        </Button>
-        <Button onClick={() => handleSendRequest()} endIcon={<SendIcon />}>
-          Send
-        </Button>
+          <Button
+            onClick={() => {
+              setIsHidden(true);
+            }}
+            endIcon={<Delete />}
+          >
+            Cancel
+          </Button>
+          <Button onClick={() => handleSendRequest()} endIcon={<SendIcon />}>
+            Send
+          </Button>
         </DialogActions>
       </Dialog>
-      {/* <div hidden={jsonResponse != "" ? false : true}>
-        <JSONPretty data={jsonResponse}></JSONPretty>
-      </div> */}
       <div>
         <Snackbar
           open={isOpen}
           autoHideDuration={6000}
           onClose={() => {
-            setIsOpen(false), setIsHidden(true), setJsonResponse("");
+            setIsOpen(false), setIsHidden(true), setJsonResponse(undefined);
           }}
         >
           <Alert

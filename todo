@@ -1,0 +1,9 @@
+1. Barcode generator (porting from Python scripts)
+
+2. Create store
+    a. Get account code/psp reference from step 1
+    b. Redirect user to step 2 with filled in fields
+
+3. Mandatory articles frontend
+    a. Authentication? (test with staging oauth token)
+    b. POST+GET+DELETE+UPDATE

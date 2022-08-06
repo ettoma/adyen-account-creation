@@ -45,23 +45,9 @@ type Business_details struct {
 	Registration_number string `json:"registrationNumber"`
 }
 
-type Name struct {
-	First_name string `json:"firstName"`
-	Gender     string `json:"gender"`
-	Last_name  string `json:"lastName"`
-}
-
-type Shareholder struct {
-	Shareholder_type string `json:"shareholderType"`
-	Job_title        string `json:"jobTitle"`
-	Name             Name   `json:"name"`
-	Shareholder_code string `json:"shareholderCode"`
-}
-
 type AccountHolderDetails struct {
 	Address         Address          `json:"address"`
 	BusinessDetails Business_details `json:"businessDetails"`
-	Shareholders    []Shareholder    `json:"shareholders"`
 	Email           string           `json:"email"`
 }
 
