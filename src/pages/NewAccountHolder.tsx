@@ -1,5 +1,6 @@
 import { useState } from "react";
 import JSONPretty from "react-json-pretty";
+import HandleSubmit from "../http_requests/HandleSubmit";
 
 import Button from "@mui/material/Button";
 import SendIcon from "@mui/icons-material/Send";
@@ -20,6 +21,8 @@ import {
 import { Delete } from "@mui/icons-material";
 
 const NewAccountHolder = () => {
+  const submit = new HandleSubmit();
+
   const [accountHolderCode, setAccountHolderCode] = useState("");
   const [country, setCountry] = useState("");
   const [doingBusinessAs, setDoingBusinessAs] = useState("");
@@ -35,13 +38,13 @@ const NewAccountHolder = () => {
   const [email, setEmail] = useState("");
   const [webAddress, setWebAddress] = useState("");
 
-  const [jsonData, setJsonData] = useState("");
-  const [isHidden, setIsHidden] = useState(true);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
 
   const [isSuccess, setIsSuccess] = useState<Boolean>();
 
   const [jsonResponse, setJsonResponse] = useState();
+  const [jsonData, setJsonData] = useState(submit.jsonData);
 
   const data = {
     accountHolderCode: accountHolderCode,
@@ -62,42 +65,16 @@ const NewAccountHolder = () => {
     processingTier: 1,
   };
 
-  function handlePreview(e: any) {
-    e.preventDefault();
-
-    const jsonData = JSON.stringify(data);
-
-    setJsonData(jsonData);
-    setIsHidden(false);
-  }
-
-  function handleSendRequest() {
-    fetch("http://localhost:8080/createAccountHolder", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: jsonData,
-    }).then((res) => handleResponseDisplay(res, res.status));
-  }
-
-  function handleResponseDisplay(res: Response, status: number) {
-    res.json().then((res) => {
-      setJsonResponse(res);
-      setIsOpen(true);
-      if (status === 200) {
-        setIsSuccess(true);
-      } else {
-        setIsSuccess(false);
-      }
-    });
-  }
-
   return (
     <div className="main-container">
       <h2>Create Account Holder</h2>
       <div>
-        <form onSubmit={(e) => handlePreview(e)}>
+        <form
+          onSubmit={(e) => {
+            submit.handlePreview(e, data);
+            setIsDialogOpen(true);
+          }}
+        >
           <FormControl className="main-container__form-field" fullWidth>
             <TextField
               label="Account holder code"
@@ -223,10 +200,16 @@ const NewAccountHolder = () => {
             />
           </FormControl>
           <Button type="submit">Preview</Button>
+          <Button
+            type="submit"
+            onClick={() => submit.handleSendRequest()}
+            endIcon={<SendIcon />}
+          >
+            Send
+          </Button>
         </form>
-        {jsonResponse ? <div>{jsonResponse["pspReference"]}</div> : null}
       </div>
-      <Dialog open={!isHidden} className="dialog">
+      <Dialog open={isDialogOpen} className="dialog">
         <DialogTitle>{jsonResponse ? "Result" : "To be sent"}</DialogTitle>
         <DialogContent>
           <JSONPretty
@@ -236,27 +219,36 @@ const NewAccountHolder = () => {
         <DialogActions>
           <Button
             onClick={() => {
-              setIsHidden(true);
+              setIsDialogOpen(false);
             }}
             endIcon={<Delete />}
           >
             Cancel
           </Button>
-          <Button onClick={() => handleSendRequest()} endIcon={<SendIcon />}>
+          <Button
+            onClick={() => {
+              submit.handleSendRequest();
+              setIsSnackbarOpen(true);
+            }}
+            endIcon={<SendIcon />}
+          >
             Send
           </Button>
         </DialogActions>
       </Dialog>
       <div>
+        {}
         <Snackbar
-          open={isOpen}
+          open={isSnackbarOpen}
           autoHideDuration={6000}
           onClose={() => {
-            setIsOpen(false), setIsHidden(true), setJsonResponse(undefined);
+            setIsDialogOpen(false),
+              setJsonResponse(undefined),
+              setIsSnackbarOpen(false);
           }}
         >
           <Alert
-            severity={isSuccess ? "success" : "error"}
+            severity={submit.handleSuccess() ? "success" : "error"}
             sx={{ width: "100%" }}
           >
             {isSuccess ? "Success " : "Error"}

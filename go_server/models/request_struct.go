@@ -1,5 +1,6 @@
 package models
 
+// ! Request struct for create_account_holder
 type Create_account_holder_request struct {
 	Account_holder_code string `json:"accountHolderCode"`
 	Country             string `json:"countryAccount"`
@@ -16,6 +17,8 @@ type Create_account_holder_request struct {
 	Address_country     string `json:"addressCountry"`
 	Web_address         string `json:"webAddress"`
 }
+
+//! Invalid response
 
 type Field_Type struct {
 	Field      string `json:"field"`

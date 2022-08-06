@@ -10,7 +10,7 @@ import (
 func main() {
 	port := ":8080"
 
-	http.HandleFunc("/createAccountHolder", api.Create_account_holder)
+	http.HandleFunc("/create-account-holder", api.Create_account_holder)
 	log.Printf("Server started at http://localhost%s", port)
 	http.ListenAndServe(port, nil)
 }

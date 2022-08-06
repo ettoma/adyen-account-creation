@@ -14,7 +14,7 @@ import (
 
 func Create_account_holder(w http.ResponseWriter, r *http.Request) {
 
-	EnableCors(&w)
+	utils.EnableCors(&w)
 
 	if r.Method == "OPTIONS" {
 		return
@@ -28,40 +28,31 @@ func Create_account_holder(w http.ResponseWriter, r *http.Request) {
 	r.Body = http.MaxBytesReader(w, r.Body, 1048576) // 1MB max, prevent malicious requests
 
 	req_body, err := io.ReadAll(r.Body)
-	if err != nil {
-		w.Write([]byte("Error reading request body"))
-		log.Println(err)
-		return
-	}
+	utils.Error(err)
 
-	var Create_account_holder_request models.Create_account_holder_request
-	err = json.Unmarshal(req_body, &Create_account_holder_request)
-	if err != nil {
-		w.Write([]byte("Error unmarshalling request body"))
-		log.Println(err)
-		return
-	}
+	var Create_r models.Create_account_holder_request
+	err = json.Unmarshal(req_body, &Create_r)
+	utils.Error(err)
 
 	url := "https://cal-test.adyen.com/cal/services/Account/v6/createAccountHolder" //! Test environment
 	method := "POST"
 
-	account_holder_code := Create_account_holder_request.Account_holder_code
-	country := Create_account_holder_request.Country
-	doing_business_as := Create_account_holder_request.Doing_business_as
-	legal_business_name := Create_account_holder_request.Legal_business_name
-	registration_number := Create_account_holder_request.Registration_number
-	shareholder_type := Create_account_holder_request.Shareholder_type
-	job_title := Create_account_holder_request.Job_title
-	first_name := Create_account_holder_request.First_name
-	gender := Create_account_holder_request.Gender
-	last_name := Create_account_holder_request.Last_name
-	shareholder_email := Create_account_holder_request.Shareholder_email
-	email := Create_account_holder_request.Email
-	address_country := Create_account_holder_request.Address_country
-	web_address := Create_account_holder_request.Web_address
+	account_holder_code := Create_r.Account_holder_code
+	country := Create_r.Country
+	doing_business_as := Create_r.Doing_business_as
+	legal_business_name := Create_r.Legal_business_name
+	registration_number := Create_r.Registration_number
+	shareholder_type := Create_r.Shareholder_type
+	job_title := Create_r.Job_title
+	first_name := Create_r.First_name
+	gender := Create_r.Gender
+	last_name := Create_r.Last_name
+	shareholder_email := Create_r.Shareholder_email
+	email := Create_r.Email
+	address_country := Create_r.Address_country
+	web_address := Create_r.Web_address
 
 	formatted_json := map[string]any{
-
 		"accountHolderCode": account_holder_code,
 		"accountHolderDetails": map[string]any{
 			"address": map[string]string{
@@ -89,39 +80,29 @@ func Create_account_holder(w http.ResponseWriter, r *http.Request) {
 			"webAddress": web_address,
 			"email":      email},
 		"processingTier": 1,
-		"legalEntity":    "Business"}
-
-	json_data, err := json.Marshal(formatted_json)
-
-	if err != nil {
-		w.Write([]byte("Error marshalling request body"))
-		log.Println(err)
-		return
+		"legalEntity":    "Business",
 	}
-	json_data_string := strings.NewReader(string(json_data))
+
+	parsed_json, err := json.Marshal(formatted_json)
+
+	utils.Error(err)
+	json_request := strings.NewReader(string(parsed_json))
 
 	client := &http.Client{}
-	req, err := http.NewRequest(method, url, json_data_string)
+	req, err := http.NewRequest(method, url, json_request)
 
-	if err != nil {
-		log.Println(err)
-		return
-	}
+	utils.Error(err)
+
 	req.Header.Add("x-API-key", utils.Get_env("TEST_API_KEY")) //! API key from .env
 	req.Header.Add("Content-Type", "application/json")
 
 	res, err := client.Do(req)
-	if err != nil {
-		log.Println(err)
-		return
-	}
+	utils.Error(err)
+
 	defer res.Body.Close()
 
 	body, err := io.ReadAll(res.Body)
-	if err != nil {
-		log.Println(err)
-		return
-	}
+	utils.Error(err)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(res.StatusCode)
@@ -133,10 +114,7 @@ func Create_account_holder(w http.ResponseWriter, r *http.Request) {
 		var Adyen_response models.Adyen_account_holder_response_valid
 		err = json.Unmarshal(body, &Adyen_response)
 
-		if err != nil {
-			log.Println(err)
-			return
-		}
+		utils.Error(err)
 
 		json_response := map[string]any{
 			"success":              true,
@@ -149,10 +127,8 @@ func Create_account_holder(w http.ResponseWriter, r *http.Request) {
 		}
 
 		json_data, err := json.Marshal(json_response)
-		if err != nil {
-			log.Println(err)
-			return
-		}
+		utils.Error(err)
+
 		w.Write(json_data)
 		log.Printf("Response status: %v \nAccount Holder Created: %v", res.StatusCode, Adyen_response.Account_holder_code)
 	}
@@ -161,10 +137,7 @@ func Create_account_holder(w http.ResponseWriter, r *http.Request) {
 		var Adyen_response models.Adyen_account_holder_response_invalid
 		err = json.Unmarshal(body, &Adyen_response)
 
-		if err != nil {
-			log.Println(err)
-			return
-		}
+		utils.Error(err)
 
 		var json_response []map[string]any
 
@@ -184,10 +157,8 @@ func Create_account_holder(w http.ResponseWriter, r *http.Request) {
 		}
 		json_data, err := json.Marshal(json_response)
 
-		if err != nil {
-			log.Println(err)
-			return
-		}
+		utils.Error(err)
+
 		w.Write(json_data)
 		log.Printf("Request failed: %v \nReason: %v", res.StatusCode, Adyen_response.Invalid_fields[0].Error_description)
 
