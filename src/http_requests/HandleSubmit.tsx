@@ -1,46 +1,71 @@
 import { FormEvent } from "react";
 
-class HandleSubmit {
-  jsonData: string = "";
-  isSuccess: boolean = false;
+const HandleFormSubmit = (
+  e: FormEvent,
+  setIsDialogOpen: Function,
+  data: object,
+  setJsonData: Function
+) => {
+  e.preventDefault();
+  setJsonData(JSON.stringify(data));
+  setIsDialogOpen(true);
+};
 
-  handlePreview(e: FormEvent, data: any) {
-    e.preventDefault();
+const HandlePostRequest = (data: string) => {
+  fetch("http://localhost:8080/create-account-holder", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: data,
+  }).then((res) => console.log(res));
+};
 
-    this.jsonData = JSON.stringify(data);
-  }
+export { HandleFormSubmit, HandlePostRequest };
 
-  handleSendRequest() {
-    fetch("http://localhost:8080/create-account-holder", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: this.jsonData,
-    }).then((res) => this.handleResponseDisplay(res, res.status));
-  }
+// import { FormEvent } from "react";
 
-  handleResponseDisplay(res: Response, status: number) {
-    res.json().then((res) => {
-      if (status != 200) {
-        this.isSuccess = true;
-      }
-    });
-    //   res.json().then((res) => {
-    //     setJsonResponse(res);
-    //     setIsOpen(true);
-    //     if (status === 200) {
-    //       setIsSuccess(true);
-    //     } else {
-    //       setIsSuccess(false);
-    //     }
-    //   });
-  }
+// class HandleSubmit {
+//   jsonData: string = "";
+//   isSuccess: boolean = false;
 
-  handleSuccess() {
-    console.log("success");
-    return this.isSuccess;
-  }
-}
+//   handlePreview(e: FormEvent, data: any) {
+//     e.preventDefault();
 
-export default HandleSubmit;
+//     this.jsonData = JSON.stringify(data);
+//   }
+
+//   handleSendRequest() {
+//     fetch("http://localhost:8080/create-account-holder", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: this.jsonData,
+//     }).then((res) => this.handleResponseDisplay(res, res.status));
+//   }
+
+//   handleResponseDisplay(res: Response, status: number) {
+//     res.json().then((res) => {
+//       if (status != 200) {
+//         this.isSuccess = true;
+//       }
+//     });
+//     //   res.json().then((res) => {
+//     //     setJsonResponse(res);
+//     //     setIsOpen(true);
+//     //     if (status === 200) {
+//     //       setIsSuccess(true);
+//     //     } else {
+//     //       setIsSuccess(false);
+//     //     }
+//     //   });
+//   }
+
+//   handleSuccess() {
+//     console.log("success");
+//     return this.isSuccess;
+//   }
+// }
+
+// export default HandleSubmit;

@@ -1,6 +1,9 @@
 import { useState } from "react";
 import JSONPretty from "react-json-pretty";
-import HandleSubmit from "../http_requests/HandleSubmit";
+import {
+  HandleFormSubmit,
+  HandlePostRequest,
+} from "../http_requests/HandleSubmit";
 
 import Button from "@mui/material/Button";
 import SendIcon from "@mui/icons-material/Send";
@@ -21,8 +24,6 @@ import {
 import { Delete } from "@mui/icons-material";
 
 const NewAccountHolder = () => {
-  const submit = new HandleSubmit();
-
   const [accountHolderCode, setAccountHolderCode] = useState("");
   const [country, setCountry] = useState("");
   const [doingBusinessAs, setDoingBusinessAs] = useState("");
@@ -44,9 +45,9 @@ const NewAccountHolder = () => {
   const [isSuccess, setIsSuccess] = useState<Boolean>();
 
   const [jsonResponse, setJsonResponse] = useState();
-  const [jsonData, setJsonData] = useState(submit.jsonData);
+  const [jsonData, setJsonData] = useState("");
 
-  const data = {
+  const data: object = {
     accountHolderCode: accountHolderCode,
     countryAccount: country,
     doingBusinessAs: doingBusinessAs,
@@ -71,8 +72,7 @@ const NewAccountHolder = () => {
       <div>
         <form
           onSubmit={(e) => {
-            submit.handlePreview(e, data);
-            setIsDialogOpen(true);
+            HandleFormSubmit(e, setIsDialogOpen, data, setJsonData);
           }}
         >
           <FormControl className="main-container__form-field" fullWidth>
@@ -200,42 +200,42 @@ const NewAccountHolder = () => {
             />
           </FormControl>
           <Button type="submit">Preview</Button>
-          <Button
+        </form>
+        <Dialog open={isDialogOpen} className="dialog">
+          <DialogTitle>{jsonResponse ? "Result" : "To be sent"}</DialogTitle>
+          <DialogContent>
+            <JSONPretty
+              data={jsonResponse ? jsonResponse : jsonData}
+            ></JSONPretty>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => {
+                setIsDialogOpen(false);
+              }}
+              endIcon={<Delete />}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                HandlePostRequest(jsonData);
+                setIsSnackbarOpen(true);
+              }}
+              endIcon={<SendIcon />}
+            >
+              Send
+            </Button>
+          </DialogActions>
+        </Dialog>
+        {/* <Button
             type="submit"
             onClick={() => submit.handleSendRequest()}
             endIcon={<SendIcon />}
           >
             Send
           </Button>
-        </form>
       </div>
-      <Dialog open={isDialogOpen} className="dialog">
-        <DialogTitle>{jsonResponse ? "Result" : "To be sent"}</DialogTitle>
-        <DialogContent>
-          <JSONPretty
-            data={jsonResponse ? jsonResponse : jsonData}
-          ></JSONPretty>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setIsDialogOpen(false);
-            }}
-            endIcon={<Delete />}
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={() => {
-              submit.handleSendRequest();
-              setIsSnackbarOpen(true);
-            }}
-            endIcon={<SendIcon />}
-          >
-            Send
-          </Button>
-        </DialogActions>
-      </Dialog>
       <div>
         {}
         <Snackbar
@@ -253,7 +253,7 @@ const NewAccountHolder = () => {
           >
             {isSuccess ? "Success " : "Error"}
           </Alert>
-        </Snackbar>
+        </Snackbar> */}
       </div>
     </div>
   );
