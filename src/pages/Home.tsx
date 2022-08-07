@@ -9,11 +9,11 @@ function Home() {
         <ol>
           <li>
             Create a new account holder{" "}
-            <Link to={"/new_account_holder"}>{">"}</Link>
+            <Link to={"/create-account-holder"}>{">"}</Link>
           </li>
           <li>
             Create a new store
-            <Link to={"/new_store"}>{">"}</Link>
+            <Link to={"/create-store"}>{">"}</Link>
           </li>
           {/* <li>
             Assign the store to the merchant

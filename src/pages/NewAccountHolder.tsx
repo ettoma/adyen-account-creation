@@ -1,5 +1,6 @@
 import { useState } from "react";
-import JSONPretty from "react-json-pretty";
+import { Link } from "react-router-dom";
+
 import {
   HandleFormSubmit,
   HandlePostRequest,
@@ -46,6 +47,8 @@ const NewAccountHolder = () => {
 
   const [jsonResponse, setJsonResponse] = useState();
   const [jsonData, setJsonData] = useState("");
+
+  const [nextPageOk, setNextPageOk] = useState(false);
 
   const data: object = {
     accountHolderCode: accountHolderCode,
@@ -204,14 +207,17 @@ const NewAccountHolder = () => {
         <Dialog open={isDialogOpen} className="dialog">
           <DialogTitle>{jsonResponse ? "Result" : "To be sent"}</DialogTitle>
           <DialogContent>
-            <JSONPretty
-              data={jsonResponse ? jsonResponse : jsonData}
-            ></JSONPretty>
+            {jsonResponse ? (
+              <pre>{JSON.stringify(jsonResponse, null, 2)}</pre>
+            ) : (
+              <pre>{JSON.stringify(data, null, 2)}</pre>
+            )}
           </DialogContent>
           <DialogActions>
             <Button
               onClick={() => {
                 setIsDialogOpen(false);
+                setJsonResponse(undefined);
               }}
               endIcon={<Delete />}
             >
@@ -219,7 +225,12 @@ const NewAccountHolder = () => {
             </Button>
             <Button
               onClick={() => {
-                HandlePostRequest(jsonData);
+                HandlePostRequest(
+                  jsonData,
+                  setJsonResponse,
+                  setIsSuccess,
+                  setNextPageOk
+                );
                 setIsSnackbarOpen(true);
               }}
               endIcon={<SendIcon />}
@@ -228,33 +239,26 @@ const NewAccountHolder = () => {
             </Button>
           </DialogActions>
         </Dialog>
-        {/* <Button
-            type="submit"
-            onClick={() => submit.handleSendRequest()}
-            endIcon={<SendIcon />}
-          >
-            Send
-          </Button>
-      </div>
-      <div>
-        {}
+
         <Snackbar
           open={isSnackbarOpen}
           autoHideDuration={6000}
           onClose={() => {
-            setIsDialogOpen(false),
-              setJsonResponse(undefined),
-              setIsSnackbarOpen(false);
+            setIsSnackbarOpen(false);
           }}
         >
           <Alert
-            severity={submit.handleSuccess() ? "success" : "error"}
+            severity={isSuccess ? "success" : "error"}
             sx={{ width: "100%" }}
           >
             {isSuccess ? "Success " : "Error"}
           </Alert>
-        </Snackbar> */}
+        </Snackbar>
       </div>
+      //TODO hide button when no psp reference is available
+      <Button disabled={!nextPageOk}>
+        <Link to="/create-store">Next step</Link>
+      </Button>
     </div>
   );
 };
