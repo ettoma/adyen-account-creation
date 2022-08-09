@@ -23,6 +23,8 @@ import {
   TextField,
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+import openSlice from "../reducer/openSlice";
 
 const NewAccountHolder = () => {
   const [accountHolderCode, setAccountHolderCode] = useState("");
@@ -40,7 +42,12 @@ const NewAccountHolder = () => {
   const [email, setEmail] = useState("");
   const [webAddress, setWebAddress] = useState("");
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  // const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  //! FIX ACTIONS
+  const isDialogOpen = useSelector((state: any) => state.open.isDialogOpen);
+  const dispatch = useDispatch();
+
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
 
   const [isSuccess, setIsSuccess] = useState<Boolean>();
@@ -73,9 +80,11 @@ const NewAccountHolder = () => {
     <div className="main-container">
       <h2>Create Account Holder</h2>
       <div>
+        <button onClick={() => dispatch<any>(open())}>open</button>
+        {/* <button onClick={dispatch<any>(close())}>close</button> */}
         <form
           onSubmit={(e) => {
-            HandleFormSubmit(e, setIsDialogOpen, data, setJsonData);
+            HandleFormSubmit(e, data, setJsonData);
           }}
         >
           <FormControl className="main-container__form-field" fullWidth>
@@ -216,7 +225,7 @@ const NewAccountHolder = () => {
           <DialogActions>
             <Button
               onClick={() => {
-                setIsDialogOpen(false);
+                // setIsDialogOpen(false);
                 setJsonResponse(undefined);
               }}
               endIcon={<Delete />}
@@ -255,10 +264,11 @@ const NewAccountHolder = () => {
           </Alert>
         </Snackbar>
       </div>
-      //TODO hide button when no psp reference is available
-      <Button disabled={!nextPageOk}>
-        <Link to="/create-store">Next step</Link>
-      </Button>
+      <div hidden={!nextPageOk}>
+        <Button>
+          <Link to="/create-store">Next step</Link>
+        </Button>
+      </div>
     </div>
   );
 };

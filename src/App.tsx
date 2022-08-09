@@ -16,7 +16,6 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/create-account-holder" element={<NewAccountHolder />} />
           <Route path="/create-store" element={<NewStore />} />
-          {/* <Route path="/assign_store" element={<AssignStore />} /> */}
           <Route
             path="*"
             element={

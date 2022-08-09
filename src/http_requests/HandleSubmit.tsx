@@ -2,13 +2,13 @@ import { FormEvent } from "react";
 
 const HandleFormSubmit = (
   e: FormEvent,
-  setIsDialogOpen: Function,
+  // setIsDialogOpen: Function,
   data: object,
   setJsonData: Function
 ) => {
   e.preventDefault();
   setJsonData(JSON.stringify(data));
-  setIsDialogOpen(true);
+  // setIsDialogOpen(true);
 };
 
 const HandlePostRequest = (
@@ -24,26 +24,19 @@ const HandlePostRequest = (
     },
     body: data,
   }).then((res) =>
-    HandleResponseDisplay(
-      res,
-      res.status,
-      setJsonResponse,
-      setIsSuccess,
-      setNextPageOk
-    )
+    HandleResponseDisplay(res, setJsonResponse, setIsSuccess, setNextPageOk)
   );
 };
 
 const HandleResponseDisplay = (
   res: Response,
-  status: number,
   setJsonResponse: Function,
   setIsSuccess: Function,
   setNextPageOk: Function
 ) => {
   res.json().then((res) => {
     setJsonResponse(res);
-    if (status != 200) {
+    if (res.status != 200) {
       setIsSuccess(false);
       setNextPageOk(false);
     } else {
