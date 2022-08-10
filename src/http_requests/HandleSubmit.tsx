@@ -2,13 +2,12 @@ import { FormEvent } from "react";
 
 const HandleFormSubmit = (
   e: FormEvent,
-  // setIsDialogOpen: Function,
   data: object,
   setJsonData: Function
 ) => {
   e.preventDefault();
+
   setJsonData(JSON.stringify(data));
-  // setIsDialogOpen(true);
 };
 
 const HandlePostRequest = (

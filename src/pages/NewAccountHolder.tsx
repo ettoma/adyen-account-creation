@@ -23,8 +23,9 @@ import {
   TextField,
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import openSlice from "../reducer/openSlice";
+import { useAppSelector, useAppDispatch } from "../reducer/hooks";
+import { openDialog, closeDialog } from "../reducer/dialogSlice";
+import { openSnackbar, closeSnackbar } from "../reducer/snackbarSlice";
 
 const NewAccountHolder = () => {
   const [accountHolderCode, setAccountHolderCode] = useState("");
@@ -42,13 +43,11 @@ const NewAccountHolder = () => {
   const [email, setEmail] = useState("");
   const [webAddress, setWebAddress] = useState("");
 
-  // const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  //! FIX ACTIONS
-  const isDialogOpen = useSelector((state: any) => state.open.isDialogOpen);
-  const dispatch = useDispatch();
-
-  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  //! Implement jsonData dispatcher
+  const isDialogOpen = useAppSelector((state) => state.dialog.open);
+  const isSnackbarOpen = useAppSelector((state) => state.snackbar.open);
+  // const jsonData = useAppSelector((state) => state.json.data);
+  const dispatch = useAppDispatch();
 
   const [isSuccess, setIsSuccess] = useState<Boolean>();
 
@@ -80,11 +79,10 @@ const NewAccountHolder = () => {
     <div className="main-container">
       <h2>Create Account Holder</h2>
       <div>
-        <button onClick={() => dispatch<any>(open())}>open</button>
-        {/* <button onClick={dispatch<any>(close())}>close</button> */}
         <form
           onSubmit={(e) => {
             HandleFormSubmit(e, data, setJsonData);
+            dispatch(openDialog());
           }}
         >
           <FormControl className="main-container__form-field" fullWidth>
@@ -225,7 +223,7 @@ const NewAccountHolder = () => {
           <DialogActions>
             <Button
               onClick={() => {
-                // setIsDialogOpen(false);
+                dispatch(closeDialog());
                 setJsonResponse(undefined);
               }}
               endIcon={<Delete />}
@@ -240,7 +238,7 @@ const NewAccountHolder = () => {
                   setIsSuccess,
                   setNextPageOk
                 );
-                setIsSnackbarOpen(true);
+                dispatch(openSnackbar());
               }}
               endIcon={<SendIcon />}
             >
@@ -248,12 +246,11 @@ const NewAccountHolder = () => {
             </Button>
           </DialogActions>
         </Dialog>
-
         <Snackbar
           open={isSnackbarOpen}
           autoHideDuration={6000}
           onClose={() => {
-            setIsSnackbarOpen(false);
+            dispatch(closeSnackbar());
           }}
         >
           <Alert
